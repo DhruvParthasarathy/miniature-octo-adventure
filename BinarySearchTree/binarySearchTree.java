@@ -175,7 +175,8 @@ class BST {
 			if( x == null) return 0;
 			
 			/**
-			 * If num is lesser than the value of the given node, see if you can find rank for num in
+			 * If num is lesser than the value of the given node, 
+			 * see if you can find rank for num in
 			 * the left sub tree of this node
 			 */
 			if(num < x.key) return rank(x.left, num);
@@ -194,8 +195,76 @@ class BST {
 		}
 		
 		/**
-		 * PUBLIC METHODS ============================================
+		 * We find the kth smallest element using the rank of each node
+		 * 
+		 * The kth smallest element is the element whose rank is k-1
+		 * 
+		 * Or the k smallest element is the element whose count+1 = k
+		 * 
+		 * @param x
+		 * @param k
+		 * @return
 		 */
+		private int kSmall(Node x, int k) {
+			
+			// since we need the smallest node 
+			// we keep track of the number of elements in the left sub tree
+			
+			// for example if the left subtree has 5 elements, 
+			// the 1st, 2nd, 3rd, 4th and the 5th smallest elements would
+			// be present in that sub tree
+
+			// if the tree is empty - return null
+			if(x == null) return -1;
+			
+			int leftCount = size(x.left);
+			
+			// if the value of k = count of elements in the left sub tree + 1
+			// this means that there are k-1 elements in the left sub tree
+			// and the current node is the kth smallest node
+			// this is because in a bst, the nodes to the left of any node
+			// are smaller than the current node
+			if ( k == leftCount + 1) return x.key;
+			
+			// if we notice that there are lesser elements in the left sub tree
+			// than the value of k, then there is no use of spending time
+			// trying to find that element in the left sub tree
+			// 
+			// For example, if we need to find the 7th smallest element in the trr
+			// and if the root node is the 4th smallest element, the 7th smallest element
+			// would be in the right sub tree
+			// 
+			// Also when we move to the right sub tree, 
+			// rather than finding the 7th smallest element in the whole tree
+			// we can find the 3rd largest element in the right sub tree under 
+			// the root node
+			
+			// this value of 3 comes from 
+			// k(7) - (leftSubTreeCount(3) + 1(rootNode)) = 3
+			
+			// so we reset the value of k before proceeding to search for that
+			// element in the left sub tree
+			else if (k > leftCount +1) {
+				
+				k = k - (size(x.left) + 1);
+				
+				return kSmall(x.right, k);
+			}
+			
+			// if none of the above conditions hold true
+			// the number of elements in the left subtree is greater than the 
+			// value of k
+			// Example: we need the 3rd smallest element, and there are 
+			// 5 elements in the left subtree
+			// so we just jump into the left sub tree and proceed
+			else return kSmall(x.left, k);
+			
+		}
+
+		
+	/**
+	 * PUBLIC METHODS ============================================
+	 */
 
 		
 		/**
@@ -296,6 +365,13 @@ class BST {
 			
 		}
 
+		public int kthSmallest(int k) {
+			
+			return kSmall(root, k);
+			
+		}
+
+
 			
 		/**
 		 * End of BST class --------------- x ----------------------- x -----------------
@@ -309,14 +385,9 @@ public class binarySearchTree{
 		// create a BST object
 		BST bst = new BST();
 		
-		bst.insert(8); 
-		bst.insert(6); 
-        bst.insert(4); 
-        bst.insert(2); 
-        bst.insert(1); 
-        bst.insert(3); 
-        bst.insert(5);
-        bst.insert(7);
+		int keys[] = { 20, 8, 22, 4, 12, 10, 14 };
+		
+		for (int x : keys)	bst.insert(x);
 		
 		System.out.printf("The maximum element in the tree is %s \n", bst.findMax());
 		
@@ -324,29 +395,34 @@ public class binarySearchTree{
 		
 		Scanner sc = new Scanner(System.in);
 		
-//		System.out.print("Enter a number to search the floor of : ");
-//		
-//		int num = sc.nextInt();
-//		
-//		System.out.printf("The element lesser than or equal to %s is %s \n", num , bst.findFloor(num));
-//
-//		
-//		System.out.print("Enter a number to search the ceiling of : ");
-//		
-//		num = sc.nextInt();
-//		
-//		System.out.printf("The element greater than or equal to %s is %s \n", num , bst.findCeiling(num));
-//		
+		System.out.print("Enter a number to search the floor of : ");
+		
+		int num = sc.nextInt();
+		
+		System.out.printf("The element lesser than or equal to %s is %s \n", num , bst.findFloor(num));
+
+		
+		System.out.print("Enter a number to search the ceiling of : ");
+		
+		num = sc.nextInt();
+		
+		System.out.printf("The element greater than or equal to %s is %s \n", num , bst.findCeiling(num));
+		
 		System.out.println("Let's look at the rank of the elments in the tree ");
 		
-		for(int i = 1; i <= 8 ; i++) {
-			System.out.printf("The rank of %s in the tree is %s \n", i , bst.findRank(i));
+		for (int x : keys) {
+			System.out.printf("The rank of %s in the tree is %s \n", x , bst.findRank(x));
 		}
 		
+		System.out.print("Enter the value of k: ");
+		int k = sc.nextInt();
 		
+		System.out.printf("Enter the value of %s smallest element is : %s",k, bst.kthSmallest(k));;
+
 		
 		sc.close();
 
 	}
 }
+
 
