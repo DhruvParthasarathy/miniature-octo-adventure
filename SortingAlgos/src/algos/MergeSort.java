@@ -28,9 +28,7 @@ public class MergeSort {
 	 * This algorithm uses a divide and conquer strategy, where we keep dividing the array in a recursive manner
 	 * till we reach individual elements.
 	 * 
-	 * Post that we start combining the individual elements and use an auxiliary array to store them in sorted order
-	 * 
-	 * We return the sorted array
+	 * Post that we start combining the individual elements with the help of ausiliary arrays
 	 */
 	static void mergeSort(int[] nums) {
 		
@@ -45,7 +43,7 @@ public class MergeSort {
 	/**
 	 * This is the core logic of the merge sort algorithm
 	 * We start by recursively splitting the array into a left sub half and a right sub half 
-	 * And before we return, we use the sorting order to merge the left sub half and the right sub half 
+	 * And before we return, we use the sorting order to merge the left sub half and the right sub half into the main array
 	 * 
 	 * @param nums
 	 * @param start
